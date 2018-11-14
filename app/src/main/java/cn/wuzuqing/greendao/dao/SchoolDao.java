@@ -95,4 +95,9 @@ public class SchoolDao extends AbstractDao<Long, School> {
 			stmt.bindLong(10, ex3);
 		}
 	}
+
+	@Override
+	protected boolean isEntityUpdateable() {
+		return false;
+	}
 }

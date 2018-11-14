@@ -24,7 +24,7 @@ public abstract class AbstractDao<K extends Number, T> implements BaseDao<K, T> 
     private String insertSql;
     private String updateSql;
     private int updateKeyIndex;
-
+    protected boolean isSetPrimaryKey ;
     private static final int WORK_INSERT = 0;
     private static final int WORK_UPDATE = 1;
     private static final int WORK_DELETE = 2;
@@ -95,6 +95,7 @@ public abstract class AbstractDao<K extends Number, T> implements BaseDao<K, T> 
      * @param id     主键的值
      */
     abstract protected void setKey(T entity, K id);
+
 
 
     protected String selectSql(K key) {
@@ -174,11 +175,15 @@ public abstract class AbstractDao<K extends Number, T> implements BaseDao<K, T> 
                         //插入数据
                         case WORK_INSERT:
                             bindValue(stat, entity);
-                            long result = stat.executeInsert();
-                            if (result < 0) {
-                                return -1;
+                            if (isSetPrimaryKey){
+                                long result = stat.executeInsert();
+                                if (result < 0) {
+                                    return -1;
+                                }
+                                setKey(entity, (K) Long.valueOf(result));
+                            }else{
+                                stat.execute();
                             }
-                            setKey(entity, (K) Long.valueOf(result));
                             rows += 1;
                             break;
                         //更新数据

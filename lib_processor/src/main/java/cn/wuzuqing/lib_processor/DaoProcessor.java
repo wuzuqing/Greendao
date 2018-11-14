@@ -127,7 +127,7 @@ public class DaoProcessor extends AbstractProcessor {
                         append("public class " + className + "Dao extends AbstractDao<Long, " + className + "> {\n").
                         append("\n\tpublic static final String DROP_TABLE_SQL = \"DROP TABLE IF EXISTS " + tableName + "\";\n").
 
-                        append("\n\tpublic " + className + "Dao(Database database) {super(database);}\n").
+                        append("\n\tpublic " + className + "Dao(Database database) {\n\t\tsuper(database);\n\t\t isSetPrimaryKey = CREATE_TABLE_SQL.contains(\"autoincrement\");\n\t}\n").
 
                         append("\n\t@Override \n\tprotected String tableName() { return \"" + tableName + "\"; }\n").
 
